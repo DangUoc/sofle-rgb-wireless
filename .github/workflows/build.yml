@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - no-led
   workflow_dispatch:
 
 permissions:
@@ -14,7 +15,7 @@ jobs:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
 
   create_release_master:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/no-led')
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -31,6 +32,6 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.date.outputs.date }}-${{ github.sha }}
-          name: Firmware ${{ steps.date.outputs.date }} - master
+          name: Firmware ${{ steps.date.outputs.date }} - ${{ github.ref_name }}
           body: Build from commit ${{ github.sha }}
           files: '*.uf2'
