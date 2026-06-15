@@ -3,8 +3,8 @@ name: Build ZMK Firmware
 on:
   push:
     branches:
-      - master
-      - no-led
+      - led-none-animation
+      - none-led-none-animation
   workflow_dispatch:
 
 permissions:
@@ -15,7 +15,7 @@ jobs:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
 
   create_release_master:
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/no-led')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/led-none-animation' || github.ref == 'refs/heads/none-led-none-animation')
     needs: build
     runs-on: ubuntu-latest
     steps:
