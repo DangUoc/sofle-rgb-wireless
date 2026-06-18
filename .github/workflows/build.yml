@@ -3,7 +3,7 @@ name: Build ZMK Firmware
 on:
   push:
     branches:
-      - led-none-animation
+      - led-with-animation
   workflow_dispatch:
 
 permissions:
@@ -14,7 +14,7 @@ jobs:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
 
   create_release_master:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/led-none-animation'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/led-with-animation'
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -31,6 +31,6 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.date.outputs.date }}-${{ github.sha }}
-          name: Firmware ${{ steps.date.outputs.date }} - led-none-animation
+          name: Firmware ${{ steps.date.outputs.date }} - led-with-animation
           body: Build from commit ${{ github.sha }}
           files: '*.uf2'
