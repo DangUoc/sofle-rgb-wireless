@@ -296,80 +296,37 @@ static void draw_mods_status(lv_obj_t *canvas, const struct status_state *state)
     const int img_size = 14;
     const int spacing = 2;
 
-    #if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_VER)
-    // --- VERTICAL (Apilado) ---
     const int base_x = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_X;
     const int base_y = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_Y;
 
+    int active_count = 0;
     for (int i = 0; i < 4; i++) {
         bool selected = (state->mod_state >> i) & 1 || (state->mod_state >> (i + 4)) & 1;
         if (selected) {
+            int slot_idx = active_count;
+            active_count++;
+
             int current_x = base_x;
-            int current_y = base_y + i * (img_size + spacing);
-            const lv_img_dsc_t *img = mod_imgs_active[i];
-            lv_canvas_draw_img(canvas, current_x, current_y, img, &img_dsc);
-        }
-    }
-
-#elif IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_HOR)
-    // --- HORIZONTAL ---
-    const int base_x = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_X;
-    const int base_y = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_Y;
-
-    for (int i = 0; i < 4; i++) {
-        bool selected = (state->mod_state >> i) & 1 || (state->mod_state >> (i + 4)) & 1;
-        if (selected) {
-            int current_x = base_x + i * (img_size + spacing);
             int current_y = base_y;
+
+            #if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_VER)
+            // --- VERTICAL (Apilado) ---
+            current_y = base_y + slot_idx * (img_size + spacing);
+            #elif IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_HOR)
+            // --- HORIZONTAL ---
+            current_x = base_x + slot_idx * (img_size + spacing);
+            #else
+            // --- BOX (2x2) ---
+            int row = slot_idx / 2;
+            int col = slot_idx % 2;
+            current_x = base_x + col * (img_size + spacing);
+            current_y = base_y + row * (img_size + spacing);
+            #endif
+
             const lv_img_dsc_t *img = mod_imgs_active[i];
             lv_canvas_draw_img(canvas, current_x, current_y, img, &img_dsc);
         }
     }
-
-#elif IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_BOX)
-    // --- BOX (2x2) ---
-    const int base_x = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_X;
-    const int base_y = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_Y;
-
-    static const int offsets_box[4][2] = {
-        {0, 0},                              // C (0,0)
-        {img_size + spacing, 0},             // S (0,1)
-        {0, img_size + spacing},             // A (1,0)
-        {img_size + spacing, img_size + spacing} // G (1,1)
-    };
-
-    for (int i = 0; i < 4; i++) {
-        bool selected = (state->mod_state >> i) & 1 || (state->mod_state >> (i + 4)) & 1;
-        if (selected) {
-            int current_x = base_x + offsets_box[i][0];
-            int current_y = base_y + offsets_box[i][1];
-            const lv_img_dsc_t *img = mod_imgs_active[i];
-            lv_canvas_draw_img(canvas, current_x, current_y, img, &img_dsc);
-        }
-    }
-
-#else
-    // --- DEFAULT: BOX fallback ---
-    const int base_x = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_X;
-    const int base_y = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_Y;
-
-    static const int offsets_default[4][2] = {
-        {0, 0},
-        {img_size + spacing, 0},
-        {0, img_size + spacing},
-        {img_size + spacing, img_size + spacing}
-    };
-
-    for (int i = 0; i < 4; i++) {
-        bool selected = (state->mod_state >> i) & 1 || (state->mod_state >> (i + 4)) & 1;
-        if (selected) {
-            int current_x = base_x + offsets_default[i][0];
-            int current_y = base_y + offsets_default[i][1];
-            const lv_img_dsc_t *img = mod_imgs_active[i];
-            lv_canvas_draw_img(canvas, current_x, current_y, img, &img_dsc);
-        }
-    }
-#endif
 
 #else
     // --- MODO LETRAS (Texto) ---
@@ -393,90 +350,32 @@ static void draw_mods_status(lv_obj_t *canvas, const struct status_state *state)
     const int inner_box_width = box_width - (2 * inner_box_offset);
     const int inner_box_height = box_height - (2 * inner_box_offset);
 
-    #if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_VER)
-    // --- VERTICAL (Apilado) ---
     const int base_x = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_X;
     const int base_y = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_Y;
 
+    int active_count = 0;
     for (int i = 0; i < 4; i++) {
         bool selected = (state->mod_state >> i) & 1 || (state->mod_state >> (i + 4)) & 1;
         if (selected) {
+            int slot_idx = active_count;
+            active_count++;
+
             int current_x = base_x;
-            int current_y = base_y + i * (box_height + 2);
-
-            lv_canvas_draw_rect(canvas, current_x, current_y, box_width, box_height, &rect_black_dsc);
-            if (inner_box_width > 0 && inner_box_height > 0) {
-                lv_canvas_draw_rect(canvas, current_x + inner_box_offset,
-                                    current_y + inner_box_offset, inner_box_width, inner_box_height,
-                                    &rect_white_dsc);
-            }
-            lv_canvas_draw_text(canvas, current_x, current_y + text_offset_y, box_width,
-                                &mod_dsc_black, items[i]);
-        }
-    }
-
-#elif IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_HOR)
-    // --- HORIZONTAL ---
-    const int base_x = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_X;
-    const int base_y = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_Y;
-
-    for (int i = 0; i < 4; i++) {
-        bool selected = (state->mod_state >> i) & 1 || (state->mod_state >> (i + 4)) & 1;
-        if (selected) {
-            int current_x = base_x + i * (box_width + 2);
             int current_y = base_y;
 
-            lv_canvas_draw_rect(canvas, current_x, current_y, box_width, box_height, &rect_black_dsc);
-            if (inner_box_width > 0 && inner_box_height > 0) {
-                lv_canvas_draw_rect(canvas, current_x + inner_box_offset,
-                                    current_y + inner_box_offset, inner_box_width, inner_box_height,
-                                    &rect_white_dsc);
-            }
-            lv_canvas_draw_text(canvas, current_x, current_y + text_offset_y, box_width,
-                                &mod_dsc_black, items[i]);
-        }
-    }
-
-#elif IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_BOX)
-    // --- BOX (2x2) ---
-    const int base_x = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_X;
-    const int base_y = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_Y;
-
-    static const int offsets_box[4][2] = {
-        {0, 0}, {box_width + 2, 0}, {0, box_height + 2}, {box_width + 2, box_height + 2}
-    };
-
-    for (int i = 0; i < 4; i++) {
-        bool selected = (state->mod_state >> i) & 1 || (state->mod_state >> (i + 4)) & 1;
-        if (selected) {
-            int current_x = base_x + offsets_box[i][0];
-            int current_y = base_y + offsets_box[i][1];
-
-            lv_canvas_draw_rect(canvas, current_x, current_y, box_width, box_height, &rect_black_dsc);
-            if (inner_box_width > 0 && inner_box_height > 0) {
-                lv_canvas_draw_rect(canvas, current_x + inner_box_offset,
-                                    current_y + inner_box_offset, inner_box_width, inner_box_height,
-                                    &rect_white_dsc);
-            }
-            lv_canvas_draw_text(canvas, current_x, current_y + text_offset_y, box_width,
-                                &mod_dsc_black, items[i]);
-        }
-    }
-
-#else
-    // --- DEFAULT: BOX fallback ---
-    const int base_x = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_X;
-    const int base_y = CONFIG_NICE_OLED_WIDGET_MODIFIERS_CUSTOM_Y;
-
-    static const int offsets_default[4][2] = {
-        {0, 0}, {box_width + 2, 0}, {0, box_height + 2}, {box_width + 2, box_height + 2}
-    };
-
-    for (int i = 0; i < 4; i++) {
-        bool selected = (state->mod_state >> i) & 1 || (state->mod_state >> (i + 4)) & 1;
-        if (selected) {
-            int current_x = base_x + offsets_default[i][0];
-            int current_y = base_y + offsets_default[i][1];
+            #if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_VER)
+            // --- VERTICAL (Apilado) ---
+            current_y = base_y + slot_idx * (box_height + 2);
+            #elif IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_HOR)
+            // --- HORIZONTAL ---
+            current_x = base_x + slot_idx * (box_width + 2);
+            #else
+            // --- BOX (2x2) ---
+            int row = slot_idx / 2;
+            int col = slot_idx % 2;
+            current_x = base_x + col * (box_width + 2);
+            current_y = base_y + row * (box_height + 2);
+            #endif
 
             lv_canvas_draw_rect(canvas, current_x, current_y, box_width, box_height, &rect_black_dsc);
             if (inner_box_width > 0 && inner_box_height > 0) {
@@ -489,7 +388,7 @@ static void draw_mods_status(lv_obj_t *canvas, const struct status_state *state)
         }
     }
 #endif
-#endif // CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED_SYMBOL
+}
 }
 
 #endif // IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED)

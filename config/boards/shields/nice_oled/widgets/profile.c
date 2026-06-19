@@ -38,7 +38,7 @@ static void draw_active_profile(lv_obj_t *canvas, const struct status_state *sta
 static void draw_active_profile_text(lv_obj_t *canvas, const struct status_state *state) {
     // new label_dsc
     lv_draw_label_dsc_t label_dsc;
-    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono_8, LV_TEXT_ALIGN_LEFT);
+    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono_16, LV_TEXT_ALIGN_LEFT);
 
     char text[14] = {};
     snprintf(text, sizeof(text), "%d", state->active_profile_index + 1);
@@ -61,7 +61,9 @@ void draw_profile_status(lv_obj_t *canvas, const struct status_state *state) {
                            i == state->active_profile_index ? &profile_active : &profile, &img_dsc);
     }
 #else
+#if IS_ENABLED(CONFIG_NICE_EPAPER_ON)
     draw_inactive_profiles(canvas, state);
     draw_active_profile(canvas, state);
+#endif
 #endif
 }

@@ -281,19 +281,12 @@ static void draw_graph(lv_obj_t *canvas, const struct status_state *state) {
 static void draw_label(lv_obj_t *canvas, const struct status_state *state) {
 
     lv_draw_label_dsc_t label_dsc_wpm;
-    init_label_dsc(&label_dsc_wpm, LVGL_FOREGROUND, &pixel_operator_mono_12, LV_TEXT_ALIGN_LEFT);
+    init_label_dsc(&label_dsc_wpm, LVGL_FOREGROUND, &pixel_operator_mono_16, LV_TEXT_ALIGN_CENTER);
 
     char wpm_text[10] = {};
 
     snprintf(wpm_text, sizeof(wpm_text), "%d", state->wpm[9]);
-    // if wpm < 10, else if wpm => 10 and wpm < 100, else wpm >= 100
-    if (state->wpm[9] < 10) {
-        lv_canvas_draw_text(canvas, CONFIG_NICE_OLED_WIDGET_WPM_LABEL_CUSTOM_X + 5, CONFIG_NICE_OLED_WIDGET_WPM_LABEL_CUSTOM_Y, 50, &label_dsc_wpm, wpm_text);
-    } else if (state->wpm[9] >= 10 && state->wpm[9] < 100) {
-        lv_canvas_draw_text(canvas, CONFIG_NICE_OLED_WIDGET_WPM_LABEL_CUSTOM_X + 2, CONFIG_NICE_OLED_WIDGET_WPM_LABEL_CUSTOM_Y, 50, &label_dsc_wpm, wpm_text);
-    } else {
-        lv_canvas_draw_text(canvas, CONFIG_NICE_OLED_WIDGET_WPM_LABEL_CUSTOM_X, CONFIG_NICE_OLED_WIDGET_WPM_LABEL_CUSTOM_Y, 50, &label_dsc_wpm, wpm_text);
-    }
+    lv_canvas_draw_text(canvas, 0, CONFIG_NICE_OLED_WIDGET_WPM_LABEL_CUSTOM_Y, 32, &label_dsc_wpm, wpm_text);
 }
 #endif // IS_ENABLED(CONFIG_NICE_OLED_WIDGET_WPM_NUMBER)
 #endif // CONFIG_NICE_EPAPER_ON
