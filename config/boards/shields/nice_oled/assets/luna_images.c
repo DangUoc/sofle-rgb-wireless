@@ -1,4 +1,5 @@
 ﻿/* Lizard Logo generated from user image media__1781891794911.png */
+#include <zephyr/kernel.h>
 #include <lvgl.h>
 
 const LV_ATTRIBUTE_MEM_ALIGN uint8_t lizard_logo_map[] = {

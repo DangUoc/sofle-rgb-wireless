@@ -16,7 +16,7 @@ LV_IMG_DECLARE(profile);
 LV_IMG_DECLARE(profile_active);
 #endif
 
-#if !IS_ENABLED(CONFIG_NICE_OLED_WIDGET_PROFILE_BIG)
+#if !IS_ENABLED(CONFIG_NICE_OLED_WIDGET_PROFILE_BIG) && IS_ENABLED(CONFIG_NICE_EPAPER_ON)
 static void draw_inactive_profiles(lv_obj_t *canvas, const struct status_state *state) {
     lv_draw_img_dsc_t img_dsc;
     lv_draw_img_dsc_init(&img_dsc);
@@ -32,7 +32,7 @@ static void draw_active_profile(lv_obj_t *canvas, const struct status_state *sta
 
     lv_canvas_draw_rect(canvas, CONFIG_NICE_OLED_WIDGET_PROFILE_CUSTOM_X + offset, CONFIG_NICE_OLED_WIDGET_PROFILE_CUSTOM_Y, 3, 3, &rect_white_dsc);
 }
-#endif // !IS_ENABLED(CONFIG_NICE_OLED_WIDGET_PROFILE_BIG)
+#endif // !IS_ENABLED(CONFIG_NICE_OLED_WIDGET_PROFILE_BIG) && IS_ENABLED(CONFIG_NICE_EPAPER_ON)
 
 #if !IS_ENABLED(CONFIG_NICE_EPAPER_ON)
 static void draw_active_profile_text(lv_obj_t *canvas, const struct status_state *state) {
