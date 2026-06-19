@@ -1,4 +1,4 @@
-﻿/* Lizard Logo generated from user image media__1781891794911.png */
+/* Lizard Logo generated from user image media__1781891794911.png */
 #include <zephyr/kernel.h>
 #include <lvgl.h>
 
