@@ -389,7 +389,6 @@ static void draw_mods_status(lv_obj_t *canvas, const struct status_state *state)
     }
 #endif
 }
-}
 
 #endif // IS_ENABLED(CONFIG_NICE_OLED_WIDGET_MODIFIERS_INDICATORS_FIXED)
 //  FIN SECCIÓN MODIFICADORES (NUEVA INTEGRACIÓN)
