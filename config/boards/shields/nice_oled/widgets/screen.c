@@ -783,6 +783,20 @@ static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[], const struct status
     }
 #endif
 
+    // Draw horizontal separator lines
+    {
+        lv_draw_line_dsc_t sep_line_dsc;
+        init_line_dsc(&sep_line_dsc, LVGL_FOREGROUND, 1);
+        
+        // Line above Lizard Logo (Y = 51)
+        lv_point_t points_top[2] = {{0, 51}, {32, 51}};
+        lv_canvas_draw_line(canvas, points_top, 2, &sep_line_dsc);
+
+        // Line above Layer (Y = 111)
+        lv_point_t points_bottom[2] = {{0, 111}, {32, 111}};
+        lv_canvas_draw_line(canvas, points_bottom, 2, &sep_line_dsc);
+    }
+
     // Rotate for horizontal display
     rotate_canvas(canvas, cbuf);
 }
