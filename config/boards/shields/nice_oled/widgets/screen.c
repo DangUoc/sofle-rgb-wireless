@@ -219,10 +219,10 @@ static struct zmk_widget_sleep_status sleep_status_widget;
  * luna
  **/
 
-#if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_WPM_LUNA)
-#include "luna.h"
-static struct zmk_widget_luna luna_widget;
-#endif
+// #if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_WPM_LUNA)
+// #include "luna.h"
+// static struct zmk_widget_luna luna_widget;
+// #endif
 
 /**
  * bongo cat
@@ -774,6 +774,15 @@ static void draw_canvas(lv_obj_t *widget, lv_color_t cbuf[], const struct status
     draw_mods_status(canvas, state);
 #endif // <-- NUEVO
 
+#if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_WPM_LUNA)
+    {
+        lv_draw_img_dsc_t luna_dsc;
+        lv_draw_img_dsc_init(&luna_dsc);
+        extern const lv_img_dsc_t lizard_logo;
+        lv_canvas_draw_img(canvas, CONFIG_NICE_OLED_WIDGET_LUNA_CUSTOM_X, CONFIG_NICE_OLED_WIDGET_LUNA_CUSTOM_Y, &lizard_logo, &luna_dsc);
+    }
+#endif
+
     // Rotate for horizontal display
     rotate_canvas(canvas, cbuf);
 }
@@ -1016,9 +1025,8 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
 #if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_WPM)
 
 #if IS_ENABLED(CONFIG_NICE_OLED_WIDGET_WPM_LUNA)
-    zmk_widget_luna_init(&luna_widget, canvas);
-    lv_obj_align(zmk_widget_luna_obj(&luna_widget), LV_ALIGN_TOP_LEFT, CONFIG_NICE_OLED_WIDGET_LUNA_CUSTOM_X, CONFIG_NICE_OLED_WIDGET_LUNA_CUSTOM_Y);
-       // IS_ENABLED(CONFIG_NICE_OLED_WIDGET_WPM_LUNA)
+    // zmk_widget_luna_init(&luna_widget, canvas);
+    // lv_obj_align(zmk_widget_luna_obj(&luna_widget), LV_ALIGN_TOP_LEFT, CONFIG_NICE_OLED_WIDGET_LUNA_CUSTOM_X, CONFIG_NICE_OLED_WIDGET_LUNA_CUSTOM_Y);
 #elif IS_ENABLED(CONFIG_NICE_OLED_WIDGET_WPM_BONGO_CAT)
     zmk_widget_wpm_bongo_cat_init(&wpm_bongo_cat_widget, canvas);
     lv_obj_align(zmk_widget_wpm_bongo_cat_obj(&wpm_bongo_cat_widget), LV_ALIGN_TOP_LEFT, CONFIG_NICE_OLED_WIDGET_BONGO_CAT_CUSTOM_X, CONFIG_NICE_OLED_WIDGET_BONGO_CAT_CUSTOM_Y);
