@@ -62,7 +62,7 @@ layers:
   - HOME
   - END
   Lower:
-  - '&bootloader'
+  - {t: ▽, type: trans}
   - F1
   - F2
   - F3
@@ -104,7 +104,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - '&bootloader'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -134,7 +134,7 @@ layers:
   - '8'
   - '9'
   - {t: ▽, type: trans}
-  - '&bootloader'
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -166,7 +166,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - '&bootloader'
   - KP DIVIDE
   - {t: ▽, type: trans}
   - '0'
